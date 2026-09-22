@@ -34,11 +34,15 @@ To make the contact form send emails automatically:
 1. Sign up at [emailjs.com](https://www.emailjs.com)
 2. Add your Gmail as a service
 3. Create a template with variables: `{{name}}`, `{{email}}`, `{{title}}`, `{{message}}`
-4. In `src/App.jsx`, find the `EMAILJS` object and replace the placeholder values:
-   - `serviceId`: your EmailJS service ID
-   - `templateId`: your EmailJS template ID
-   - `publicKey`: your EmailJS public key
+4. Create a `.env` file in the project root:
+   ```
+   VITE_EMAILJS_SERVICE_ID=your_service_id
+   VITE_EMAILJS_TEMPLATE_ID=your_template_id
+   VITE_EMAILJS_PUBLIC_KEY=your_public_key
+   ```
 5. Reload the site — emails will now send automatically
+
+> **Note:** Add `.env` to `.gitignore` (already included). Never commit secret credentials to version control. For Vercel deployment, add these same variables under **Settings → Environment Variables**.
 
 ## Files
 - `src/App.jsx` : all components and data

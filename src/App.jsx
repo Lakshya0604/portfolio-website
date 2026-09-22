@@ -691,13 +691,13 @@ function About() {
 // 1. Sign up at emailjs.com
 // 2. Add a Gmail service
 // 3. Create a template with fields: name, email, message
-// 4. Replace SERVICE_ID, TEMPLATE_ID, and PUBLIC_KEY below
+// 4. Put your IDs in .env (see README for setup instructions)
 const EMAILJS = {
-  serviceId: "service_4hhqj7q",
-  templateId: "template_6uk9doh",
-  publicKey: "Me6uIEY3t1JRLeVRT",
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID || "",
+  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "",
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "",
 };
-const EMAILJS_ENABLED = EMAILJS.serviceId !== "service_xxxxxx";
+const EMAILJS_ENABLED = EMAILJS.serviceId !== "";
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
