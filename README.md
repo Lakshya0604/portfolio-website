@@ -47,6 +47,4 @@ To make the contact form send emails automatically:
 ## Files
 - `src/App.jsx` : all components and data
 - `src/index.css` : Tailwind + custom animations (aurora, marquee, workflow, etc.)
-- `standalone/portfolio-standalone.html` : single-file version of the same site (open directly in a browser)
-
-Built with AI (Claude) for the InAmigos Foundation, Task 3.
+- `standalone/portfolio-standalone.html` : single-file version of the same site (open directly in a browser) 
