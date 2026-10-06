@@ -222,7 +222,31 @@ const PROJECTS = [
       { label: "Text extracted", sub: "unpdf", icon: "screen", title: "The PDF is read in memory", text: "The server extracts the text and rejects scanned image PDFs that no ATS could read either.", trace: "extractText(pdf)" },
       { label: "Keywords matched", sub: "Plain code", icon: "check", title: "Keywords are counted in code", text: "Skills named in the job description are checked against the resume, with tests covering the matcher.", trace: "matchKeywords(resume, jd)" },
       { label: "AI review", sub: "Groq", icon: "spark", title: "The AI reviews the fit", text: "The model returns a fit rating, weak bullets with rewrites and formatting fixes as JSON.", trace: "reviewResume(...)  >  JSON" },
-      { label: "Saved", sub: "MongoDB Atlas", icon: "db", title: "The result is saved to the account", text: "Only the analysis result is stored, linked to the logged-in user.", trace: "Analysis.create({ user, score })" },
+      { label: "Saved", sub: "MongoDB Atlas", icon: "db", title: "The result is saved to the account", text: "The extracted resume text and the result are stored, linked to the logged-in user, so a tailored resume can be made later.", trace: "Analysis.create({ user, score })" },
+    ],
+  },
+  {
+    name: "MockMate",
+    line: "AI mock interviews. Pick a role and level, answer 5 questions by typing or speaking, and get a score and feedback after every answer plus a final report.",
+    status: "Live",
+    color: "teal",
+    points: [
+      "Each answer is scored 0 to 10 by the AI against a rubric, with what was good, what to improve and a stronger sample answer.",
+      "The overall score is the average of the answer scores, calculated in code and covered by tests, so it is not an AI guess.",
+      "Voice answers use the browser's speech recognition. Future questions stay hidden until you reach them.",
+      "Signup and login with bcrypt and JWT. Every interview and report is saved per user in MongoDB Atlas.",
+    ],
+    stack: ["React", "Vite", "Node.js", "Express", "MongoDB Atlas", "JWT", "Groq LLM"],
+    links: [
+      { label: "Open the live app", href: "https://mockmate-40bm.onrender.com" },
+    ],
+    doneText: "That was one interview, from the first question to the final report.",
+    steps: [
+      { label: "Pick a role", sub: "React", icon: "screen", title: "The user picks a role and level", text: "The server asks the AI for five questions fitted to that role, level and focus.", trace: "POST /api/interviews" },
+      { label: "Answer", sub: "Text or voice", icon: "box", title: "The user answers one question at a time", text: "Answers can be typed or spoken. The next question stays hidden until this one is scored.", trace: "POST /api/interviews/:id/answer" },
+      { label: "AI scores", sub: "Groq", icon: "spark", title: "The AI scores the answer", text: "The model gives a 0 to 10 score, strengths, fixes and a stronger sample answer as JSON.", trace: "evaluateAnswer(...)  >  JSON" },
+      { label: "Final score", sub: "Plain code", icon: "check", title: "The overall score is plain math", text: "The average of the five scores is calculated in code, with unit tests.", trace: "overallScore(scores)" },
+      { label: "Saved", sub: "MongoDB Atlas", icon: "db", title: "The report is saved", text: "The interview and report are stored under the logged-in user's history.", trace: "Interview.save()" },
     ],
   },
   {
