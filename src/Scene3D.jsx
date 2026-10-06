@@ -17,7 +17,7 @@ export default function Scene3D() {
       el.dataset.failed = "1";
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 1.5 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
     renderer.domElement.style.cssText = "width:100%;height:100%;display:block";
@@ -51,7 +51,7 @@ export default function Scene3D() {
 
     // rings
     const mkRing = (r, color, op, tilt) => {
-      const m = new THREE.Mesh(new THREE.TorusGeometry(r, 0.012, 8, small ? 80 : 160), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: op }));
+      const m = new THREE.Mesh(new THREE.TorusGeometry(r, 0.012, 8, 80), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: op }));
       m.rotation.set(tilt[0], tilt[1], 0);
       group.add(m);
       return m;
@@ -68,7 +68,7 @@ export default function Scene3D() {
     }
 
     // particles
-    const N = small ? 260 : 700;
+    const N = 180;
     const pos = new Float32Array(N * 3);
     for (let i = 0; i < N; i++) {
       const r = 3.4 + Math.random() * 5;
@@ -86,6 +86,15 @@ export default function Scene3D() {
     scene.add(new THREE.AmbientLight(0xffffff, 0.55));
     const l1 = new THREE.PointLight(cPink, 38, 20); l1.position.set(4, 3, 5); scene.add(l1);
     const l2 = new THREE.PointLight(cTeal, 30, 20); l2.position.set(-5, -2, 4); scene.add(l2);
+
+    const themeObserver = new MutationObserver(() => {
+      const cs = getComputedStyle(document.documentElement);
+      const current = (n) => new THREE.Color(...cs.getPropertyValue("--" + n).trim().split(/\s+/).map(x => Number(x) / 255));
+      core.material.color.copy(current("violet")); core.material.emissive.copy(current("violet"));
+      wire.material.color.copy(current("teal")); pts.material.color.copy(current("teal"));
+      r1.material.color.copy(current("pink")); r2.material.color.copy(current("teal"));
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     const resize = () => {
       const w = el.clientWidth || 1, h = el.clientHeight || 1;
@@ -106,15 +115,17 @@ export default function Scene3D() {
     };
     window.addEventListener("pointermove", onMove, { passive: true });
 
-    let raf = 0, visible = true, t0 = performance.now();
-    const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; });
+    let raf = 0, visible = true, t0 = performance.now(), lastFrame = 0;
+    const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible && !document.hidden && !raf) raf = requestAnimationFrame(tick); });
     io.observe(el);
     const onVis = () => { if (!document.hidden && !raf) raf = requestAnimationFrame(tick); };
     document.addEventListener("visibilitychange", onVis);
 
     function tick(now) {
       raf = 0;
-      if (document.hidden) return;
+      if (document.hidden || !visible) return;
+      if (now - lastFrame < 33.3) { raf = requestAnimationFrame(tick); return; }
+      lastFrame = now;
       if (visible) {
         const t = (now - t0) / 1000;
         core.rotation.y = t * 0.32;
@@ -142,7 +153,7 @@ export default function Scene3D() {
 
     return () => {
       cancelAnimationFrame(raf);
-      ro.disconnect(); io.disconnect();
+      ro.disconnect(); io.disconnect(); themeObserver.disconnect();
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("visibilitychange", onVis);
       scene.traverse((o) => { o.geometry?.dispose?.(); o.material?.dispose?.(); });
