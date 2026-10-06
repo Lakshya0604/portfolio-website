@@ -330,6 +330,9 @@ function Nav({ theme, setTheme, active }) {
               <span className="sm:hidden">{short}</span>
             </a>
           ))}
+          <a href="#contact" className="hire-pill hidden sm:inline-flex items-center gap-2">
+            <span className="ping" />Hire me
+          </a>
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
@@ -457,10 +460,11 @@ function Hero() {
         <p className="fadeup mt-7 text-xl leading-relaxed max-w-[52ch]" style={{ animationDelay: "0.75s" }}>
           I build MERN apps with real payments, live order tracking and AI agents, and I deploy them. Below, every project shows how its request travels from the screen to the database.
         </p>
-        <div className="fadeup mt-9 flex flex-wrap gap-3" style={{ animationDelay: "0.95s" }}>
-          <MagLink href="#projects" className={btnPrimary}>See my projects</MagLink>
-          <MagLink href={CONFIG.github} external className={btnGhost}>GitHub</MagLink>
-          {CONFIG.resume && <MagLink href={CONFIG.resume} external className={btnGhost}>Resume</MagLink>}
+        <div className="fadeup mt-9 flex flex-wrap gap-2.5" style={{ animationDelay: "0.95s" }}>
+          <MagLink href={"mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("Opportunity for Lakshya")} className={btnPrimary + " cta-shine !px-[18px]"}>Hire me</MagLink>
+          <MagLink href="#projects" className={btnGhost + " !px-[18px]"}>See my projects</MagLink>
+          <MagLink href={CONFIG.github} external className={btnGhost + " !px-[18px]"}>GitHub</MagLink>
+          {CONFIG.resume && <MagLink href={CONFIG.resume} external className={btnGhost + " !px-[18px]"}>Resume</MagLink>}
         </div>
       </div>
       <div className="fadeup" style={{ animationDelay: "0.6s" }}>
@@ -844,6 +848,27 @@ function ScrollToTop() {
 }
 
 /* --------------------------------- app ------------------------------- */
+function HireBar() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const c = document.getElementById("contact");
+    const check = () => {
+      const y = window.scrollY;
+      const cr = c ? c.getBoundingClientRect() : null;
+      const inContact = cr && cr.top < window.innerHeight * 0.7 && cr.bottom > 0;
+      setShow(y > 700 && !inContact);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+  return (
+    <a href="#contact" className={"hirebar " + (show ? "on" : "")} aria-hidden={!show} tabIndex={show ? 0 : -1}>
+      <span className="ping" />Hire me
+    </a>
+  );
+}
+
 function App() {
   const [theme, setTheme] = useTheme();
   const [active, setActive] = useState("");
@@ -897,6 +922,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <HireBar />
       <ScrollToTop />
     </div>
   );
