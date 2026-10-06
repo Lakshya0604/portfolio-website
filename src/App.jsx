@@ -200,14 +200,16 @@ const PROJECTS = [
   },
   {
     name: "HireSense",
-    line: "Upload a resume PDF, paste a job description, and get a match score with concrete fixes.",
+    line: "Upload a resume PDF, paste a job description or link, and get a match score out of 10, concrete fixes, a tailored resume to download and free prep resources.",
     status: "Live",
     color: "sky",
     points: [
       "Score is half keyword coverage counted in plain code and half an AI fit rating, so the number is explainable.",
       "The AI (Groq) is told to use only facts from the resume, and suggests truthful bullet rewrites with [X] placeholders for numbers.",
       "Signup and login with bcrypt-hashed passwords and JWT. Each user's analysis history is saved in MongoDB Atlas.",
-      "PDF text is parsed in memory and not stored. Rate limits protect login and the AI endpoint.",
+      "Paste the job description or fetch it from a job link (with protection against internal-address requests). If a site blocks reading, it asks you to paste.",
+      "Tailored resume as PDF or DOCX, rewritten only from what is in the original; skills or numbers that are not in it are stripped out in code. Free YouTube and docs links for each gap.",
+      "The PDF itself is not kept, only the extracted text and results in your account. Rate limits protect login and the AI endpoints.",
     ],
     stack: ["React", "Vite", "Node.js", "Express", "MongoDB Atlas", "JWT", "Groq LLM"],
     links: [
