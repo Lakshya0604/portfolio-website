@@ -1,3 +1,5 @@
+import KHANA_CAPTURE from "./3-khana.webp";
+import VYAPAAR_CAPTURE from "./4-vyapaar.webp";
 import { useState, useEffect, useRef, Fragment, lazy, Suspense } from "react";
 import PHOTO from "./assets/lakshya.jpg";
 
@@ -13,6 +15,66 @@ const CONFIG = {
   resume: "https://drive.google.com/file/d/1FWDCfjh27vV2M93CbXZ3k9hyIzpCrcPR/view?usp=sharing",
 };
 
+
+
+function useVisible() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    let inView = false;
+    const update = () => setVisible(inView && !document.hidden);
+    const io = new IntersectionObserver(([e]) => { inView = e.isIntersecting; update(); });
+    if(ref.current) io.observe(ref.current);
+    document.addEventListener("visibilitychange", update);
+    return () => {io.disconnect(); document.removeEventListener("visibilitychange", update);};
+  }, []);
+  return [ref, visible];
+}
+
+// Projected 3D geometry on mobile: no WebGL/shaders, small canvas, 24fps.
+function MobileScene() {
+  const [ref, visible] = useVisible();
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas || !visible || REDUCE) return;
+    const ctx = canvas.getContext("2d");
+    if(!ctx) return;
+    let raf, last = 0;
+    const colors = () => {const css = getComputedStyle(document.documentElement); return ["violet","teal","coral"].map(n => `rgb(${css.getPropertyValue("--"+n).trim().split(/\s+/).join(",")})`);};
+    let palette = colors();
+    const mo = new MutationObserver(() => {palette=colors();});
+    mo.observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+    const vertices = [[0,-1.6,0],[0,1.6,0],[-1,0,-1],[1,0,-1],[1,0,1],[-1,0,1]];
+    const edges = [[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5],[2,3],[3,4],[4,5],[5,2]];
+    function draw(now) {
+      if(now-last >= 1000/24) {
+        last=now; const t=now/1000;
+        ctx.clearRect(0,0,480,400);
+        const project = ([x,y,z]) => {let a=x*Math.cos(t*.28)-z*Math.sin(t*.28), c=x*Math.sin(t*.28)+z*Math.cos(t*.28);let b=y*Math.cos(.4)-c*Math.sin(.4);c=y*Math.sin(.4)+c*Math.cos(.4);const f=95/(1+c*.11);return [240+a*f,205+b*f];};
+        ctx.lineWidth=1.2;ctx.globalAlpha=.7;ctx.strokeStyle=palette[0];
+        edges.forEach(([a,b])=>{const x=project(vertices[a]),y=project(vertices[b]);ctx.beginPath();ctx.moveTo(...x);ctx.lineTo(...y);ctx.stroke();});
+        for(let j=0;j<2;j++) {ctx.strokeStyle=palette[j+1];ctx.globalAlpha=.4;ctx.beginPath();for(let i=0;i<=64;i++){const a=i/64*Math.PI*2;const pt=project([Math.cos(a)*2.1,Math.sin(a)*.7*(j?1:-1),Math.sin(a)*2.1]);if(i===0)ctx.moveTo(...pt);else ctx.lineTo(...pt);}ctx.stroke();}
+        ctx.globalAlpha=.7;ctx.fillStyle=palette[1];for(let i=0;i<24;i++){const a=i*2.399+t*.035;const r=120+(i%5)*20;ctx.beginPath();ctx.arc(240+Math.cos(a)*r,200+Math.sin(a)*r*.8,1.4,0,Math.PI*2);ctx.fill();}
+        for(let i=0;i<3;i++){const a=t*(.35+i*.1)+i*2.1;const pt=project([Math.cos(a)*2.1, Math.sin(a*1.3)*.5, Math.sin(a)*2.1]);ctx.fillStyle=palette[i];ctx.beginPath();ctx.arc(...pt,4,0,Math.PI*2);ctx.fill();}
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    raf=requestAnimationFrame(draw);
+    return()=>{cancelAnimationFrame(raf);mo.disconnect();};
+  },[visible]);
+  return <canvas ref={ref} width="480" height="400" className="mobile-scene" aria-hidden="true" />;
+}
+
+function ProjectGallery() {
+  return <section className="project-gallery max-w-[1200px] mx-auto px-6 lg:px-10 py-10" aria-label="Project previews">
+    <Reveal><p className="font-display text-sm uppercase tracking-[.2em] text-mute">Built, not just imagined</p><h2 className="font-display text-3xl sm:text-4xl font-bold mt-3 mb-7">A closer look at my work.</h2></Reveal>
+    <div className="preview-grid">
+      <Reveal className="preview-card"><a href="https://khana-khajana-2ijn.onrender.com" target="_blank" rel="noopener noreferrer"><img src={KHANA_CAPTURE} width="960" height="640" loading="lazy" decoding="async" alt="Actual Khana Khajana app sign-in screen"/><div><h3>Khana Khajana</h3><p>Live app capture · Sign-in screen</p></div></a></Reveal>
+      <Reveal delay={80} className="preview-card"><a href="https://vyapaar-pulse.onrender.com" target="_blank" rel="noopener noreferrer"><img src={VYAPAAR_CAPTURE} width="960" height="640" loading="lazy" decoding="async" alt="Actual VyapaarPulse business report interface"/><div><h3>VyapaarPulse</h3><p>Live app capture · Business reports</p></div></a></Reveal>
+      <Reveal delay={160} className="preview-card"><div className="agent-visual" role="img" aria-label="Illustrated HiveNixAI architecture, not an app screenshot"><span className="agent-title">HiveNixAI</span><span className="agent-prompt">Your message</span><span className="agent-path">↓ gateway ↓</span><span className="agent-router">LangGraph router</span><div className="agent-nodes"><span>Chat</span><span>Search</span><span>Coding</span></div><span className="agent-path">↓ agent reply</span></div><div><h3>HiveNixAI</h3><p>Architecture illustration · In development</p></div></Reveal>
+    </div>
+  </section>;
+}
 
 const Scene3D = lazy(() => import("./Scene3D.jsx"));
 function canUse3D() {
@@ -32,11 +94,13 @@ function HeroScene() {
     const id = "requestIdleCallback" in window ? window.requestIdleCallback(go, { timeout: 1500 }) : setTimeout(go, 600);
     return () => ("cancelIdleCallback" in window ? window.cancelIdleCallback(id) : clearTimeout(id));
   }, []);
-  return on ? <Suspense fallback={<div className="orbit-fallback" aria-hidden="true" />}><Scene3D /></Suspense> : <div className="orbit-fallback" aria-hidden="true" />;
+  if (MOBILE && !REDUCE) return <MobileScene />;
+  return on ? <Suspense fallback={<MobileScene />}><Scene3D /></Suspense> : <MobileScene />;
 }
 
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const LIGHT_MOTION = REDUCE || window.matchMedia("(max-width: 1023px), (pointer: coarse)").matches;
+const LIGHT_MOTION = REDUCE;
+const MOBILE = window.matchMedia("(max-width: 1023px), (pointer: coarse)").matches;
 const cv = (name) => "var(--" + name + ")";
 
 /* ------------------------------ icons ------------------------------ */
@@ -244,10 +308,11 @@ function useTypewriter(text, speed = 14) {
     setOut("");
     let i = 0;
     const id = setInterval(() => {
-      i += 1;
+      if (document.hidden) return;
+      i += MOBILE ? 3 : 2;
       setOut(text.slice(0, i));
       if (i >= text.length) clearInterval(id);
-    }, speed);
+    }, Math.max(speed, 45));
     return () => clearInterval(id);
   }, [text]);
   return out;
@@ -277,7 +342,7 @@ function Reveal({ as: Tag = "div", delay = 0, className = "", style, children })
 function MagLink({ href, className = "", external, children }) {
   const ref = useRef(null);
   const move = (e) => {
-    if (LIGHT_MOTION) return;
+    if (LIGHT_MOTION || MOBILE) return;
     const el = ref.current;
     const r = el.getBoundingClientRect();
     el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.22}px, ${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
@@ -294,7 +359,7 @@ function MagLink({ href, className = "", external, children }) {
 function Tilt({ className = "", children }) {
   const ref = useRef(null);
   const move = (e) => {
-    if (LIGHT_MOTION) return;
+    if (LIGHT_MOTION || MOBILE) return;
     const el = ref.current;
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
@@ -374,14 +439,15 @@ function Nav({ theme, setTheme, active }) {
 
 /* --------------------------- hero: request flow ---------------------- */
 function Flow() {
+  const [motionRef, visible] = useVisible();
   const [step, setStep] = useState(0);
   const [auto, setAuto] = useState(!LIGHT_MOTION);
 
   useEffect(() => {
-    if (!auto) return;
+    if (!auto || !visible) return;
     const id = setInterval(() => setStep((s) => (s + 1) % SEQ.length), 2600);
     return () => clearInterval(id);
-  }, [auto]);
+  }, [auto, visible]);
 
   const [idx, dir] = SEQ[step];
   const stage = STAGES[idx];
@@ -393,7 +459,7 @@ function Flow() {
   };
 
   return (
-    <div className="flowcard rounded-2xl border border-rule bg-panel p-5 sm:p-6">
+    <div ref={motionRef} className="flowcard rounded-2xl border border-rule bg-panel p-5 sm:p-6">
       <div className="relative" style={{ paddingTop: 6 }}>
         <div
           className={"flowline " + (dir === "back" ? "rev" : "")}
@@ -510,6 +576,7 @@ function Marquee() {
 
 /* --------------------------- animated workflow ----------------------- */
 function Workflow({ steps, color, running, doneText }) {
+  const [motionRef, visible] = useVisible();
   const n = steps.length;
   const [i, setI] = useState(REDUCE ? n : 0);
   const [auto, setAuto] = useState(!LIGHT_MOTION);
@@ -519,10 +586,10 @@ function Workflow({ steps, color, running, doneText }) {
   }, [running]);
 
   useEffect(() => {
-    if (!running || !auto) return;
+    if (!running || !auto || !visible) return;
     const id = setInterval(() => setI((v) => (v >= n ? 0 : v + 1)), 1900);
     return () => clearInterval(id);
-  }, [running, auto, n]);
+  }, [running, auto, n, visible]);
 
   const finished = i >= n;
   const s = steps[Math.min(i, n - 1)];
@@ -535,7 +602,7 @@ function Workflow({ steps, color, running, doneText }) {
   };
 
   return (
-    <div className="wf rounded-2xl border border-rule bg-panel p-5 sm:p-7" style={{ "--c": cv(color) }}>
+    <div ref={motionRef} className="wf rounded-2xl border border-rule bg-panel p-5 sm:p-7" style={{ "--c": cv(color) }}>
       <div className="flex items-center justify-between gap-3 mb-6">
         <p className="font-display font-bold text-lg">How it works</p>
         <button onClick={toggle} className="text-sm font-display font-semibold underline underline-offset-4 decoration-2" style={{ textDecorationColor: "rgb(var(--c))" }}>
@@ -893,6 +960,14 @@ function HireBar() {
 }
 
 function App() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".aurora, .mq, .portrait-wrap, .wf, #top, .gborder");
+    const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("motion-sleep", !e.isIntersecting)), {rootMargin:"80px"});
+    els.forEach(el => io.observe(el));
+    const vis = () => document.documentElement.classList.toggle("motion-hidden", document.hidden);
+    document.addEventListener("visibilitychange", vis);
+    return () => {io.disconnect(); document.removeEventListener("visibilitychange", vis);};
+  }, []);
   const [theme, setTheme] = useTheme();
   const [active, setActive] = useState("");
   const bar = useRef(null);
@@ -940,6 +1015,7 @@ function App() {
       <main>
         <Hero />
         <Marquee />
+        <ProjectGallery />
         <Projects />
         <Debugging />
         <About />
