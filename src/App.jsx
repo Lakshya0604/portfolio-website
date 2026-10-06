@@ -17,7 +17,7 @@ const CONFIG = {
 const Scene3D = lazy(() => import("./Scene3D.jsx"));
 function canUse3D() {
   try {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 1023px), (pointer: coarse)").matches) return false;
     if (navigator.connection && (navigator.connection.saveData || /(^|-)2g$/.test(navigator.connection.effectiveType || ""))) return false;
     if ((navigator.deviceMemory && navigator.deviceMemory < 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 2)) return false;
     const c = document.createElement("canvas");
@@ -32,10 +32,11 @@ function HeroScene() {
     const id = "requestIdleCallback" in window ? window.requestIdleCallback(go, { timeout: 1500 }) : setTimeout(go, 600);
     return () => ("cancelIdleCallback" in window ? window.cancelIdleCallback(id) : clearTimeout(id));
   }, []);
-  return on ? <Suspense fallback={null}><Scene3D /></Suspense> : null;
+  return on ? <Suspense fallback={<div className="orbit-fallback" aria-hidden="true" />}><Scene3D /></Suspense> : <div className="orbit-fallback" aria-hidden="true" />;
 }
 
 const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LIGHT_MOTION = REDUCE || window.matchMedia("(max-width: 1023px), (pointer: coarse)").matches;
 const cv = (name) => "var(--" + name + ")";
 
 /* ------------------------------ icons ------------------------------ */
@@ -237,9 +238,9 @@ function useTheme() {
 }
 
 function useTypewriter(text, speed = 14) {
-  const [out, setOut] = useState(REDUCE ? text : "");
+  const [out, setOut] = useState(LIGHT_MOTION ? text : "");
   useEffect(() => {
-    if (REDUCE) { setOut(text); return; }
+    if (LIGHT_MOTION) { setOut(text); return; }
     setOut("");
     let i = 0;
     const id = setInterval(() => {
@@ -276,7 +277,7 @@ function Reveal({ as: Tag = "div", delay = 0, className = "", style, children })
 function MagLink({ href, className = "", external, children }) {
   const ref = useRef(null);
   const move = (e) => {
-    if (REDUCE) return;
+    if (LIGHT_MOTION) return;
     const el = ref.current;
     const r = el.getBoundingClientRect();
     el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.22}px, ${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
@@ -293,7 +294,7 @@ function MagLink({ href, className = "", external, children }) {
 function Tilt({ className = "", children }) {
   const ref = useRef(null);
   const move = (e) => {
-    if (REDUCE) return;
+    if (LIGHT_MOTION) return;
     const el = ref.current;
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
@@ -374,7 +375,7 @@ function Nav({ theme, setTheme, active }) {
 /* --------------------------- hero: request flow ---------------------- */
 function Flow() {
   const [step, setStep] = useState(0);
-  const [auto, setAuto] = useState(!REDUCE);
+  const [auto, setAuto] = useState(!LIGHT_MOTION);
 
   useEffect(() => {
     if (!auto) return;
@@ -511,7 +512,7 @@ function Marquee() {
 function Workflow({ steps, color, running, doneText }) {
   const n = steps.length;
   const [i, setI] = useState(REDUCE ? n : 0);
-  const [auto, setAuto] = useState(!REDUCE);
+  const [auto, setAuto] = useState(!LIGHT_MOTION);
 
   useEffect(() => {
     if (!running) { setI(REDUCE ? n : 0); setAuto(!REDUCE); }
@@ -909,7 +910,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (REDUCE) return;
+    if (LIGHT_MOTION) return;
     const move = (e) => {
       if (glow.current) glow.current.style.transform = `translate(${e.clientX - 220}px, ${e.clientY - 220}px)`;
     };
