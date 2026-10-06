@@ -340,3 +340,8 @@ h1 .word > span { background-size: 520px 100%; }
 @media(prefers-reduced-motion:reduce) {.mobile-scene{display:none;}}
 .aurora i:nth-child(1) {background:radial-gradient(ellipse,rgb(var(--violet) / .7),transparent 70%);}
 .hire-pill,.hirebar {background:linear-gradient(120deg,rgb(var(--b1)),rgb(var(--b2)));}
+/* Keep grid intrinsic sizing from pushing mobile content beyond the viewport. */
+#top {grid-template-columns:minmax(0,1fr);}
+#top > div:not(.scene3d) {min-width:0;}
+.flowcard {min-width:0;max-width:100%;overflow:hidden;}
+@media(min-width:1024px) {#top {grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);}}
