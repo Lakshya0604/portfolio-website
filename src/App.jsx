@@ -199,6 +199,31 @@ const PROJECTS = [
     ],
   },
   {
+    name: "HireSense",
+    line: "Upload a resume PDF, paste a job description, and get a match score with concrete fixes.",
+    status: "Live",
+    color: "sky",
+    points: [
+      "Score is half keyword coverage counted in plain code and half an AI fit rating, so the number is explainable.",
+      "The AI (Groq) is told to use only facts from the resume, and suggests truthful bullet rewrites with [X] placeholders for numbers.",
+      "Signup and login with bcrypt-hashed passwords and JWT. Each user's analysis history is saved in MongoDB Atlas.",
+      "PDF text is parsed in memory and not stored. Rate limits protect login and the AI endpoint.",
+    ],
+    stack: ["React", "Vite", "Node.js", "Express", "MongoDB Atlas", "JWT", "Groq LLM"],
+    links: [
+      { label: "Open the live app", href: "https://hiresense-f3p6.onrender.com" },
+      { label: "View repository", href: "https://github.com/Lakshya0604/hiresense" },
+    ],
+    doneText: "That was one resume, from the PDF upload to a ranked list of fixes.",
+    steps: [
+      { label: "Uploads resume", sub: "React", icon: "box", title: "The user uploads a PDF", text: "The resume PDF and the pasted job description are sent to the API as one multipart request.", trace: "POST /api/analyze  (resume.pdf, jd)" },
+      { label: "Text extracted", sub: "unpdf", icon: "screen", title: "The PDF is read in memory", text: "The server extracts the text and rejects scanned image PDFs that no ATS could read either.", trace: "extractText(pdf)" },
+      { label: "Keywords matched", sub: "Plain code", icon: "check", title: "Keywords are counted in code", text: "Skills named in the job description are checked against the resume, with tests covering the matcher.", trace: "matchKeywords(resume, jd)" },
+      { label: "AI review", sub: "Groq", icon: "spark", title: "The AI reviews the fit", text: "The model returns a fit rating, weak bullets with rewrites and formatting fixes as JSON.", trace: "reviewResume(...)  >  JSON" },
+      { label: "Saved", sub: "MongoDB Atlas", icon: "db", title: "The result is saved to the account", text: "Only the analysis result is stored, linked to the logged-in user.", trace: "Analysis.create({ user, score })" },
+    ],
+  },
+  {
     name: "TechLearn",
     line: "A learning platform where instructors publish courses and students pay to enroll.",
     status: "Deployed",
@@ -705,7 +730,7 @@ function Projects() {
   const [open, setOpen] = useState(0);
   return (
     <Section id="projects">
-      <H2 lead="Three full-stack builds. Open one to watch how a request moves through it, step by step.">Projects</H2>
+      <H2 lead="Full-stack builds. Open one to watch how a request moves through it, step by step.">Projects</H2>
       <div>
         {PROJECTS.map((p, i) => (
           <Project key={p.name} p={p} i={i} open={open === i} onToggle={() => setOpen(open === i ? -1 : i)} />
