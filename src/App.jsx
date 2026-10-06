@@ -239,6 +239,7 @@ const PROJECTS = [
     stack: ["React", "Vite", "Node.js", "Express", "MongoDB Atlas", "JWT", "Groq LLM"],
     links: [
       { label: "Open the live app", href: "https://mockmate-40bm.onrender.com" },
+      { label: "View repository", href: "https://github.com/Lakshya0604/mockmate" },
     ],
     doneText: "That was one interview, from the first question to the final report.",
     steps: [
