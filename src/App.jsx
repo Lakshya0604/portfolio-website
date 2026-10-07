@@ -199,23 +199,35 @@ const PROJECTS = [
     ],
   },
   {
-    name: "HireSense",
-    line: "Upload a resume PDF, paste a job description or link, and get a match score out of 10, concrete fixes, a tailored resume to download and free prep resources.",
-    status: "Live",
-    color: "sky",
-    points: [
-      "Score is half keyword coverage counted in plain code and half an AI fit rating, so the number is explainable.",
-      "The AI (Groq) is told to use only facts from the resume, and suggests truthful bullet rewrites with [X] placeholders for numbers.",
-      "Signup and login with bcrypt-hashed passwords and JWT. Each user's analysis history is saved in MongoDB Atlas.",
-      "Paste the job description or fetch it from a job link (with protection against internal-address requests). If a site blocks reading, it asks you to paste.",
-      "Tailored resume as PDF or DOCX, rewritten only from what is in the original; skills or numbers that are not in it are stripped out in code. Free YouTube and docs links for each gap.",
-      "The PDF itself is not kept, only the extracted text and results in your account. Rate limits protect login and the AI endpoints.",
-    ],
-    stack: ["React", "Vite", "Node.js", "Express", "MongoDB Atlas", "JWT", "Groq LLM"],
-    links: [
-      { label: "Open the live app", href: "https://hiresense-f3p6.onrender.com" },
-      { label: "View repository", href: "https://github.com/Lakshya0604/hiresense" },
-    ],
+      "name": "HireSense",
+      "line": "A MERN resume-to-job matcher with keyword coverage, AI feedback and tailored resume exports.",
+      "status": "Deployed",
+      "color": "sky",
+      "points": [
+          "Upload a resume PDF and paste a job description or link.",
+          "Compare keyword coverage and get AI feedback on missing skills and weak bullets.",
+          "JWT login and MongoDB analysis history keep saved reviews under your account.",
+          "Generate a tailored DOCX or PDF, then review it before using it. Scores are guidance, not interview promises."
+      ],
+      "stack": [
+          "React",
+          "Vite",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "JWT",
+          "Groq"
+      ],
+      "links": [
+          {
+              "label": "Open the live app",
+              "href": "https://hiresense-f3p6.onrender.com/"
+          },
+          {
+              "label": "View repository",
+              "href": "https://github.com/Lakshya0604/hiresense"
+          }
+      ],
     doneText: "That was one resume, from the PDF upload to a ranked list of fixes.",
     steps: [
       { label: "Uploads resume", sub: "React", icon: "box", title: "The user uploads a PDF", text: "The resume PDF and the pasted job description are sent to the API as one multipart request.", trace: "POST /api/analyze  (resume.pdf, jd)" },
@@ -271,6 +283,62 @@ const PROJECTS = [
       { label: "Enrolled", sub: "MongoDB", icon: "check", title: "The enrollment is saved", text: "After the payment, the course is added to the student's account in MongoDB.", trace: "save enrollment  >  student account" },
       { label: "Watches lectures", sub: "Cloudinary", icon: "play", title: "Watch the lectures", text: "Lecture videos that instructors uploaded are served from Cloudinary.", trace: "cloudinary video  >  player" },
     ],
+  },
+  {
+      "name": "CSV Doctor",
+      "line": "A browser-only tool that cleans messy CSV files. Nothing is uploaded; everything runs on your device.",
+      "status": "Deployed",
+      "color": "teal",
+      "points": [
+          "Import a CSV file or paste raw text, with a choice of delimiter.",
+          "Preview original vs cleaned rows side by side before exporting.",
+          "Header fixes, blank-row and duplicate removal, and date/number normalization.",
+          "Validation blocks a bad export, and formula-injection protection keeps spreadsheets safe."
+      ],
+      "stack": [
+          "React",
+          "Vite",
+          "Papa Parse",
+          "JavaScript"
+      ],
+      "links": [
+          {
+              "label": "Open the live app",
+              "href": "https://csv-doctor-ihm2.onrender.com/"
+          },
+          {
+              "label": "View repository",
+              "href": "https://github.com/Lakshya0604/csv-doctor"
+          }
+      ],
+      "steps": []
+  },
+  {
+      "name": "AgentDesk",
+      "line": "A MERN AI support demo that proposes database actions and waits for explicit user confirmation.",
+      "status": "Deployed",
+      "color": "violet",
+      "points": [
+          "Ask about demo orders in natural language, with Groq AI intent classification.",
+          "Cancellation and simulated refund requests become proposals, not immediate changes.",
+          "Policy checks and explicit confirmation control database actions.",
+          "JWT login, MongoDB records and an audit trail keep each user's demo activity separate. No real refunds or money movement."
+      ],
+      "stack": [
+          "React",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "JWT",
+          "Groq"
+      ],
+      "links": [
+          {
+              "label": "Open the live app",
+              "href": "https://agentdesk-ycsk.onrender.com/"
+          }
+      ],
+      "steps": []
   },
   {
     name: "HiveNixAI",
@@ -722,7 +790,7 @@ function Project({ p, open, onToggle, i }) {
       <div className={"acc " + (open ? "open" : "")} aria-hidden={!open}>
         <div>
           <div className="pl-5 pb-10 space-y-8">
-            <Workflow steps={p.steps} color={p.color} running={open} doneText={p.doneText} />
+            {p.steps.length > 0 && <Workflow steps={p.steps} color={p.color} running={open} doneText={p.doneText} />}
             <div className="grid md:grid-cols-[1.3fr_1fr] gap-8 md:gap-12">
               <ul className="space-y-3.5 text-lg leading-relaxed">
                 {p.points.map((pt) => (
