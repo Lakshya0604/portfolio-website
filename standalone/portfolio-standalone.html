@@ -421,6 +421,94 @@ const PROJECTS = [
     ]
   },
   {
+      "name": "CSV Doctor",
+      "line": "A browser-only tool that cleans messy CSV files. Nothing is uploaded; everything runs on your device.",
+      "status": "Deployed",
+      "color": "teal",
+      "points": [
+          "Import a CSV file or paste raw text, with a choice of delimiter.",
+          "Preview original vs cleaned rows side by side before exporting.",
+          "Header fixes, blank-row and duplicate removal, and date/number normalization.",
+          "Validation blocks a bad export, and formula-injection protection keeps spreadsheets safe."
+      ],
+      "stack": [
+          "React",
+          "Vite",
+          "Papa Parse",
+          "JavaScript"
+      ],
+      "links": [
+          {
+              "label": "Open the live app",
+              "href": "https://csv-doctor-ihm2.onrender.com/"
+          },
+          {
+              "label": "View repository",
+              "href": "https://github.com/Lakshya0604/csv-doctor"
+          }
+      ],
+      "steps": []
+  },
+  {
+      "name": "HireSense",
+      "line": "A MERN resume-to-job matcher with keyword coverage, AI feedback and tailored resume exports.",
+      "status": "Deployed",
+      "color": "sky",
+      "points": [
+          "Upload a resume PDF and paste a job description or link.",
+          "Compare keyword coverage and get AI feedback on missing skills and weak bullets.",
+          "JWT login and MongoDB analysis history keep saved reviews under your account.",
+          "Generate a tailored DOCX or PDF, then review it before using it. Scores are guidance, not interview promises."
+      ],
+      "stack": [
+          "React",
+          "Vite",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "JWT",
+          "Groq"
+      ],
+      "links": [
+          {
+              "label": "Open the live app",
+              "href": "https://hiresense-f3p6.onrender.com/"
+          },
+          {
+              "label": "View repository",
+              "href": "https://github.com/Lakshya0604/hiresense"
+          }
+      ],
+      "steps": []
+  },
+  {
+      "name": "AgentDesk",
+      "line": "A MERN AI support demo that proposes database actions and waits for explicit user confirmation.",
+      "status": "Deployed",
+      "color": "violet",
+      "points": [
+          "Ask about demo orders in natural language, with Groq AI intent classification.",
+          "Cancellation and simulated refund requests become proposals, not immediate changes.",
+          "Policy checks and explicit confirmation control database actions.",
+          "JWT login, MongoDB records and an audit trail keep each user's demo activity separate. No real refunds or money movement."
+      ],
+      "stack": [
+          "React",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "JWT",
+          "Groq"
+      ],
+      "links": [
+          {
+              "label": "Open the live app",
+              "href": "https://agentdesk-ycsk.onrender.com/"
+          }
+      ],
+      "steps": []
+  },
+  {
     name: "HiveNixAI",
     line: "A multi-agent AI platform split into small, independent services.",
     status: "In development",
@@ -659,7 +747,7 @@ function Workflow({ steps, color, running, doneText }) {
 }
 function Project({ p, open, onToggle, i }) {
   const live = p.status !== "In development";
-  return /* @__PURE__ */ React.createElement(Reveal, { delay: i * 80, className: "proj border-t border-rule last:border-b " + (open ? "open" : ""), style: { "--c": cv(p.color) } }, /* @__PURE__ */ React.createElement("span", { className: "proj-bar" }), /* @__PURE__ */ React.createElement("h3", { className: "m-0" }, /* @__PURE__ */ React.createElement("button", { onClick: onToggle, "aria-expanded": open, className: "w-full text-left py-6 md:py-8 pl-5 flex items-start gap-4 group" }, /* @__PURE__ */ React.createElement("span", { className: "flex-1 min-w-0" }, /* @__PURE__ */ React.createElement("span", { className: "proj-name block font-display font-bold tracking-tight text-[1.7rem] md:text-[2.4rem] leading-tight" }, p.name), /* @__PURE__ */ React.createElement("span", { className: "block mt-2 text-lg text-mute max-w-[58ch] leading-snug" }, p.line)), /* @__PURE__ */ React.createElement("span", { className: "pill hidden sm:inline-block mt-2 text-[13px] font-display font-semibold px-3 py-1 rounded-full " + (live ? "" : "pill-dev") }, p.status), /* @__PURE__ */ React.createElement("span", { className: "plusbtn mt-2 grid place-items-center w-9 h-9 rounded-full border border-rule shrink-0" }, /* @__PURE__ */ React.createElement("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" }, /* @__PURE__ */ React.createElement("path", { d: "M12 5v14", className: "plus-v" }), /* @__PURE__ */ React.createElement("path", { d: "M5 12h14" }))))), /* @__PURE__ */ React.createElement("div", { className: "acc " + (open ? "open" : ""), "aria-hidden": !open }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "pl-5 pb-10 space-y-8" }, /* @__PURE__ */ React.createElement(Workflow, { steps: p.steps, color: p.color, running: open, doneText: p.doneText }), /* @__PURE__ */ React.createElement("div", { className: "grid md:grid-cols-[1.3fr_1fr] gap-8 md:gap-12" }, /* @__PURE__ */ React.createElement("ul", { className: "space-y-3.5 text-lg leading-relaxed" }, p.points.map((pt) => /* @__PURE__ */ React.createElement("li", { key: pt, className: "pl-5 relative" }, /* @__PURE__ */ React.createElement("span", { className: "absolute left-0 top-[0.72em] w-2.5 h-[3px] rounded", style: { background: "rgb(var(--c))" } }), pt))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "font-display font-semibold mb-3" }, "Built with"), /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap gap-2" }, p.stack.map((s) => /* @__PURE__ */ React.createElement(Chip, { key: s }, s))), p.links.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "mt-6 flex flex-wrap gap-3" }, p.links.map((l) => /* @__PURE__ */ React.createElement("a", { key: l.href, href: l.href, target: "_blank", rel: "noopener noreferrer", className: btnPrimary + " inline-block" }, l.label)))))))));
+  return /* @__PURE__ */ React.createElement(Reveal, { delay: i * 80, className: "proj border-t border-rule last:border-b " + (open ? "open" : ""), style: { "--c": cv(p.color) } }, /* @__PURE__ */ React.createElement("span", { className: "proj-bar" }), /* @__PURE__ */ React.createElement("h3", { className: "m-0" }, /* @__PURE__ */ React.createElement("button", { onClick: onToggle, "aria-expanded": open, className: "w-full text-left py-6 md:py-8 pl-5 flex items-start gap-4 group" }, /* @__PURE__ */ React.createElement("span", { className: "flex-1 min-w-0" }, /* @__PURE__ */ React.createElement("span", { className: "proj-name block font-display font-bold tracking-tight text-[1.7rem] md:text-[2.4rem] leading-tight" }, p.name), /* @__PURE__ */ React.createElement("span", { className: "block mt-2 text-lg text-mute max-w-[58ch] leading-snug" }, p.line)), /* @__PURE__ */ React.createElement("span", { className: "pill hidden sm:inline-block mt-2 text-[13px] font-display font-semibold px-3 py-1 rounded-full " + (live ? "" : "pill-dev") }, p.status), /* @__PURE__ */ React.createElement("span", { className: "plusbtn mt-2 grid place-items-center w-9 h-9 rounded-full border border-rule shrink-0" }, /* @__PURE__ */ React.createElement("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" }, /* @__PURE__ */ React.createElement("path", { d: "M12 5v14", className: "plus-v" }), /* @__PURE__ */ React.createElement("path", { d: "M5 12h14" }))))), /* @__PURE__ */ React.createElement("div", { className: "acc " + (open ? "open" : ""), "aria-hidden": !open }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "pl-5 pb-10 space-y-8" }, /* @__PURE__ */ p.steps.length > 0 && React.createElement(Workflow, { steps: p.steps, color: p.color, running: open, doneText: p.doneText }), /* @__PURE__ */ React.createElement("div", { className: "grid md:grid-cols-[1.3fr_1fr] gap-8 md:gap-12" }, /* @__PURE__ */ React.createElement("ul", { className: "space-y-3.5 text-lg leading-relaxed" }, p.points.map((pt) => /* @__PURE__ */ React.createElement("li", { key: pt, className: "pl-5 relative" }, /* @__PURE__ */ React.createElement("span", { className: "absolute left-0 top-[0.72em] w-2.5 h-[3px] rounded", style: { background: "rgb(var(--c))" } }), pt))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "font-display font-semibold mb-3" }, "Built with"), /* @__PURE__ */ React.createElement("div", { className: "flex flex-wrap gap-2" }, p.stack.map((s) => /* @__PURE__ */ React.createElement(Chip, { key: s }, s))), p.links.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "mt-6 flex flex-wrap gap-3" }, p.links.map((l) => /* @__PURE__ */ React.createElement("a", { key: l.href, href: l.href, target: "_blank", rel: "noopener noreferrer", className: btnPrimary + " inline-block" }, l.label)))))))));
 }
 function Projects() {
   const [open, setOpen] = useState(0);
@@ -752,4 +840,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ Reac
 
 </script>
 </body>
-      </html>
+  </html>
