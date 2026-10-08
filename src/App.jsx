@@ -286,19 +286,25 @@ const PROJECTS = [
   },
   {
       "name": "CSV Doctor",
-      "line": "A browser-only tool that cleans messy CSV files. Nothing is uploaded; everything runs on your device.",
+      "line": "A CSV cleaning tool with accounts. Cleaning runs in your browser; log in to save each run to your history and re-download it anytime.",
       "status": "Deployed",
       "color": "teal",
       "points": [
           "Import a CSV file or paste raw text, with a choice of delimiter.",
           "Preview original vs cleaned rows side by side before exporting.",
           "Header fixes, blank-row and duplicate removal, and date/number normalization.",
-          "Validation blocks a bad export, and formula-injection protection keeps spreadsheets safe."
+          "Validation blocks a bad export, and formula-injection protection keeps spreadsheets safe.",
+          "Sign up or log in (JWT) to save every cleaning run in MongoDB, then re-download the cleaned CSV and change log from a history page.",
+          "Forgot-password reset by email, with a single-use link that expires."
       ],
       "stack": [
           "React",
           "Vite",
           "Papa Parse",
+          "Node.js",
+          "Express",
+          "MongoDB",
+          "JWT",
           "JavaScript"
       ],
       "links": [
