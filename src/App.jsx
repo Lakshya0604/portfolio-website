@@ -859,6 +859,31 @@ function Debugging() {
   );
 }
 
+const OSS_PRS = [
+  { n: "#332", title: "Sequences in the schema explorer", body: "Shows sequences (data type, start value, step) for PostgreSQL and SQL Server in the schema explorer.", date: "Merged Oct 9, 2026", href: "https://github.com/Rohithgilla12/data-peek/pull/332", color: "teal" },
+  { n: "#333", title: "ClickHouse column stats", body: "Added column profiling for ClickHouse: row, null and distinct counts, numeric/date/text extras and top values. Closes issue #319.", date: "Merged Oct 11, 2026", href: "https://github.com/Rohithgilla12/data-peek/pull/333", color: "sky" },
+];
+
+function OpenSource() {
+  return (
+    <Section id="open-source">
+      <H2 lead="Two pull requests merged into data-peek, an open-source SQL client.">Open source</H2>
+      <div>
+        {OSS_PRS.map((p, i) => (
+          <Reveal key={p.n} delay={i * 60} className="bug grid md:grid-cols-[1fr_1.4fr] gap-2 md:gap-12 py-6 pl-5 border-t border-rule last:border-b" style={{ "--c": cv(p.color) }}>
+            <span className="bug-bar" />
+            <h3 className="font-display font-semibold text-xl leading-snug">{p.title}<span className="block text-base text-mute font-normal mt-1">{p.date}</span></h3>
+            <div>
+              <p className="text-lg text-mute leading-relaxed">{p.body}</p>
+              <a href={p.href} target="_blank" rel="noopener noreferrer" className={btnPrimary + " inline-block mt-4"}>View PR {p.n}</a>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 /* -------------------------------- about ------------------------------ */
 function About() {
   const rows = [
@@ -888,7 +913,7 @@ function About() {
             I learn by building things that have to work for real users. Most of my time goes into MERN projects, and right now I'm finishing my final-year project while preparing for placements.
           </p>
           <p className="mt-5 text-xl leading-relaxed max-w-[58ch]">
-            When something breaks I write down why, which is where the section above came from. I'm also working toward my first open-source contribution, to LibreChat.
+            When something breaks I write down why, which is where the section above came from. I've also had two pull requests merged into data-peek, an open-source SQL client.
           </p>
           <dl className="mt-10 border-t border-rule">
             {rows.map(([k, v, c]) => (
@@ -1144,6 +1169,7 @@ function App() {
         <ProjectGallery />
         <Projects />
         <Debugging />
+        <OpenSource />
         <About />
         <Contact />
       </main>
