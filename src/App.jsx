@@ -10,7 +10,7 @@ const CONFIG = {
   email: "lakshyayaduvanshi28@gmail.com",
   phone: "+91 92580 48164",
   phoneLink: "+919258048164",
-  linkedin: "https://www.linkedin.com/in/lakshya-yadav-32a692312/",
+  linkedin: "https://www.linkedin.com/in/lakshyayadav-dev/",
   github: "https://github.com/Lakshya0604",
   resume: "https://drive.google.com/file/d/1FWDCfjh27vV2M93CbXZ3k9hyIzpCrcPR/view?usp=sharing",
 };
