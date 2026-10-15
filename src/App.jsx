@@ -176,6 +176,20 @@ const TECH = [
 
 const PROJECTS = [
   {
+    name: "Digital Studio",
+    line: "A personal interactive 3D office portfolio. Tap a room and explore.",
+    status: "Live", color: "teal",
+    points: ["Tap-to-walk navigation with a receptionist escort and obstacle-aware routes.", "Twelve animated fictional office characters, overhead map and arrival-only room cards.", "Responsive phone and desktop experience, with project, service and contact links.", "Virtual portfolio concept, not a physical office or an actual team-size claim."],
+    stack: ["Three.js", "JavaScript", "Firebase Hosting"],
+    links: [{label: "Explore the 3D studio", href: "https://lakshya-studio-3d.web.app/"}],
+    doneText: "Explore a room, then open its projects or contact links.",
+    steps: [
+      {label:"Pick a room",sub:"Tap navigation",icon:"box",title:"Choose a destination",text:"Tap a room, a floor or the corner minimap. The journey starts without an interrupting popup.",trace:"destination > obstacle-aware path"},
+      {label:"Follow the guide",sub:"Three.js scene",icon:"user",title:"The receptionist leads the way",text:"The visitor walks through the office with an escort. Map and follow cameras share the same live scene.",trace:"visitor + guide > selected room"},
+      {label:"Arrive",sub:"Project cards",icon:"check",title:"Details open after arrival",text:"The room card opens only after the visitor reaches the destination. Follow links to projects, services or contact.",trace:"arrival > room card"}
+    ]
+  },
+  {
     name: "Khana Khajana",
     line: "Food delivery with three kinds of users and live order tracking.",
     status: "Live",
