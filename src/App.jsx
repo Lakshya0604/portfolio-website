@@ -12,7 +12,7 @@ const CONFIG = {
   phoneLink: "+919258048164",
   linkedin: "https://www.linkedin.com/in/lakshyayadav-dev/",
   github: "https://github.com/Lakshya0604",
-  resume: "https://drive.google.com/file/d/1FWDCfjh27vV2M93CbXZ3k9hyIzpCrcPR/view?usp=sharing",
+  resume: new URL("../1-Lakshya_Yadav_Resume_Final.pdf", import.meta.url).href,
 };
 
 
@@ -372,7 +372,7 @@ const PROJECTS = [
       "My final-year project. I post the build progress on LinkedIn as I go.",
     ],
     stack: ["React", "Vite", "Redux", "Node.js", "Express", "MongoDB", "Firebase Auth", "LangChain", "LangGraph"],
-    links: [],
+    links: [{ label: "View GitHub repository", href: "https://github.com/Lakshya0604/HiveNixAI" }],
     doneText: "That was one message, from Google sign-in to the agent's reply.",
     steps: [
       { label: "Signs in", sub: "Firebase + JWT", icon: "key", title: "Sign in with Google", text: "Firebase handles Google sign-in, and my auth service issues a JWT for the session.", trace: "signInWithPopup(auth, googleprovider)" },
@@ -687,7 +687,7 @@ function Hero() {
           ))}
         </h1>
         <p className="fadeup mt-7 text-xl leading-relaxed max-w-[52ch]" style={{ animationDelay: "0.75s" }}>
-          I build MERN apps with real payments, live order tracking and AI agents, and I deploy them. Below, every project shows how its request travels from the screen to the database.
+          I build MERN apps with test-mode payment integrations, live order tracking and AI agents, and I deploy them. Below, every project shows how its request travels from the screen to the database.
         </p>
         <div className="fadeup mt-9 flex flex-wrap gap-2.5" style={{ animationDelay: "0.95s" }}>
           <MagLink href={"mailto:" + CONFIG.email + "?subject=" + encodeURIComponent("Opportunity for Lakshya")} className={btnPrimary + " cta-shine !px-[18px]"}>Hire me</MagLink>
